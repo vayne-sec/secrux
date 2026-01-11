@@ -1,0 +1,92 @@
+services:
+  postgres:
+    image: postgres:15.7-alpine
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-secrux}
+      POSTGRES_USER: ${POSTGRES_USER:-secrux}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-secrux} -d ${POSTGRES_DB:-secrux}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.3
+    restart: unless-stopped
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_4LW_COMMANDS_WHITELIST: srvr,ruok
+      KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=srvr,ruok"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.3
+    restart: unless-stopped
+    ports:
+      - "${KAFKA_PORT:-19092}:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://${KAFKA_ADVERTISED_HOST:-127.0.0.1}:${KAFKA_PORT:-19092}
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.4
+    restart: unless-stopped
+    command:
+      - start
+      - --http-port=8081
+      - --hostname-strict=false
+      - --import-realm
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-change-me}
+      KC_HEALTH_ENABLED: "true"
+    ports:
+      - "${KEYCLOAK_PORT:-8081}:8081"
+    volumes:
+      - ../../../keycloak:/opt/keycloak/data/import
+
+  ai-postgres:
+    image: postgres:15.7-alpine
+    restart: unless-stopped
+    ports:
+      - "${AI_POSTGRES_PORT:-5433}:5432"
+    environment:
+      POSTGRES_DB: ${AI_POSTGRES_DB:-secrux_ai}
+      POSTGRES_USER: ${AI_POSTGRES_USER:-secrux_ai}
+      POSTGRES_PASSWORD: ${AI_POSTGRES_PASSWORD:-change-me}
+    volumes:
+      - ai_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${AI_POSTGRES_USER:-secrux_ai} -d ${AI_POSTGRES_DB:-secrux_ai}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  ai_postgres_data:

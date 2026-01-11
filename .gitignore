@@ -1,0 +1,28 @@
+# Local env files
+.env
+.env.local
+
+# Generated TLS certificates / keys (do not commit)
+certs/
+deploy/production/control-plane/certs/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Dependency / build artifacts
+**/node_modules/
+**/dist/
+**/build/
+**/.gradle/
+**/.gradle-home/
+**/.gradle-user-home/
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.egg-info/
+
+# Secrux runtime artifacts
+secrux-ai/storage/

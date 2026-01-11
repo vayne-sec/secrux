@@ -1,0 +1,790 @@
+{
+  "realm": "secrux",
+  "enabled": true,
+  "displayName": "Secrux Dev Realm",
+  "defaultSignatureAlgorithm": "RS256",
+  "registrationAllowed": false,
+  "rememberMe": false,
+  "resetPasswordAllowed": false,
+  "verifyEmail": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "bruteForceProtected": true,
+  "clientScopes": [
+    {
+      "name": "secrux-tenant",
+      "description": "Injects tenant_id claim into tokens",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "tenant_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "tenant_id",
+            "claim.name": "tenant_id",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "defaultDefaultClientScopes": [
+    "secrux-tenant"
+  ],
+  "defaultOptionalClientScopes": [],
+  "roles": {
+    "realm": [
+      {
+        "id": "32eac500-4f5b-41fe-a542-271fc4157cac",
+        "name": "secrux_admin",
+        "description": "Full access to Secrux APIs",
+        "composite": true,
+        "clientRole": false,
+        "composites": {
+          "realm": [
+            "task:create",
+            "task:read",
+            "task:update",
+            "task:delete",
+            "task:stage:read",
+            "task:artifact:read",
+            "project:create",
+            "project:update",
+            "project:read",
+            "repository:manage",
+            "repository:read",
+            "rule:manage",
+            "rule:read",
+            "ruleset:publish",
+            "ticket:create",
+            "ticket:read",
+            "ticket:manage",
+            "executor:register",
+            "executor:read",
+            "executor:manage",
+            "finding:ingest",
+            "finding:read",
+            "finding:manage",
+            "stage:manage",
+            "stage:read",
+            "stage:execute",
+            "baseline:manage",
+            "baseline:read",
+            "ai-client:read",
+            "ai-client:manage",
+            "ai-agent:read",
+            "ai-agent:manage",
+            "ai-mcp:read",
+            "ai-mcp:manage",
+            "ai-knowledge:read",
+            "ai-knowledge:manage",
+            "user:read",
+            "user:manage"
+          ]
+        },
+        "containerId": "secrux"
+      },
+      {
+        "id": "11936be2-8367-43c5-b593-b0c42cc2e0d8",
+        "name": "secrux_viewer",
+        "description": "Read-only access to Secrux",
+        "composite": true,
+        "clientRole": false,
+        "composites": {
+          "realm": [
+            "task:read",
+            "task:stage:read",
+            "task:artifact:read",
+            "project:read",
+            "repository:read",
+            "rule:read",
+            "ticket:read",
+            "executor:read",
+            "finding:read",
+            "stage:read",
+            "baseline:read",
+            "ai-client:read",
+            "ai-agent:read",
+            "ai-mcp:read",
+            "ai-knowledge:read",
+            "user:read"
+          ]
+        },
+        "containerId": "secrux"
+      },
+      {
+        "id": "c0776999-85b9-4eb4-8221-cb67db99eea1",
+        "name": "secrux_operator",
+        "description": "Operate scans and manage projects (no IAM admin)",
+        "composite": true,
+        "clientRole": false,
+        "composites": {
+          "realm": [
+            "ai-agent:read",
+            "ai-client:read",
+            "ai-knowledge:read",
+            "ai-mcp:read",
+            "baseline:read",
+            "executor:read",
+            "finding:read",
+            "project:create",
+            "project:read",
+            "project:update",
+            "repository:manage",
+            "repository:read",
+            "rule:read",
+            "stage:execute",
+            "stage:manage",
+            "stage:read",
+            "task:artifact:read",
+            "task:create",
+            "task:read",
+            "task:stage:read",
+            "task:update",
+            "ticket:read",
+            "user:read"
+          ]
+        },
+        "containerId": "secrux"
+      },
+      {
+        "id": "92cce23b-cec7-4bfe-baeb-10f0d883b9cf",
+        "name": "secrux_security_manager",
+        "description": "Manage findings/tickets/rules (no IAM admin)",
+        "composite": true,
+        "clientRole": false,
+        "composites": {
+          "realm": [
+            "ai-agent:read",
+            "ai-client:read",
+            "ai-knowledge:read",
+            "ai-mcp:read",
+            "baseline:manage",
+            "baseline:read",
+            "executor:read",
+            "finding:manage",
+            "finding:read",
+            "project:read",
+            "repository:read",
+            "rule:manage",
+            "rule:read",
+            "ruleset:publish",
+            "stage:read",
+            "task:artifact:read",
+            "task:read",
+            "task:stage:read",
+            "ticket:create",
+            "ticket:manage",
+            "ticket:read",
+            "user:read"
+          ]
+        },
+        "containerId": "secrux"
+      },
+      {
+        "id": "173150ab-1c73-400a-9c1a-163452926127",
+        "name": "secrux_user_manager",
+        "description": "Manage users, roles, and tenant settings",
+        "composite": true,
+        "clientRole": false,
+        "composites": {
+          "realm": [
+            "user:read",
+            "user:manage"
+          ]
+        },
+        "containerId": "secrux"
+      },
+      {
+        "id": "7c8a530e-9cf0-4bf0-877b-f4a8060d0cef",
+        "name": "task:create",
+        "description": "Secrux permission: task:create",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "2969163c-a11a-47a7-8ea1-97eea55ec490",
+        "name": "task:read",
+        "description": "Secrux permission: task:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "7c7d7f50-e02e-4aaf-8f75-f70cb1a052a2",
+        "name": "task:update",
+        "description": "Secrux permission: task:update",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "d46de5ca-9d20-4c5b-8ced-fa7f3c7d4855",
+        "name": "task:delete",
+        "description": "Secrux permission: task:delete",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "238de080-3de1-44d0-9404-3cf1cf16582d",
+        "name": "task:stage:read",
+        "description": "Secrux permission: task:stage:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "a92f3cd2-8c75-4d55-82aa-5d8e8c7d2c67",
+        "name": "task:artifact:read",
+        "description": "Secrux permission: task:artifact:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "b8b2bfa5-20b7-48c5-9e0d-1d5c1b34e9b2",
+        "name": "project:create",
+        "description": "Secrux permission: project:create",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "2b3db524-7ad4-44d4-9d2f-5c10de0b6d49",
+        "name": "project:update",
+        "description": "Secrux permission: project:update",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "c7c3a6e1-9f62-4bb7-98d6-65b308c2f3bb",
+        "name": "project:read",
+        "description": "Secrux permission: project:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "0f5b2cb8-7f0f-4f6a-8e0c-1e33d1bd0b13",
+        "name": "repository:manage",
+        "description": "Secrux permission: repository:manage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "1e2b5d85-0d43-42d0-b4ee-9909a6cc2c70",
+        "name": "repository:read",
+        "description": "Secrux permission: repository:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "cbe20c9a-7b5a-4d0d-9f7e-4f27a6b8f6e9",
+        "name": "rule:manage",
+        "description": "Secrux permission: rule:manage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "d7b9a9b1-4c8c-4b9a-8f4f-1d4e9f61c1e7",
+        "name": "rule:read",
+        "description": "Secrux permission: rule:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "cd2fe7e5-6f73-4f87-9c7c-6b9c9c0aee2c",
+        "name": "ruleset:publish",
+        "description": "Secrux permission: ruleset:publish",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "f7c5a9a8-0b0d-4d1b-8bfb-7f9b8e9b0c0d",
+        "name": "ticket:create",
+        "description": "Secrux permission: ticket:create",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "4f4b1f2a-7e6b-4f83-9fd2-8c2f67e4c3b5",
+        "name": "ticket:read",
+        "description": "Secrux permission: ticket:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "c9c0b6d5-6d6a-4b4b-9a6a-2a0e6c3e1e6b",
+        "name": "ticket:manage",
+        "description": "Secrux permission: ticket:manage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "4e8b1c1b-6a8b-4f62-9c1b-9c1b7a2b8d6a",
+        "name": "executor:register",
+        "description": "Secrux permission: executor:register",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "d3b1c2a1-7c2a-4a1b-9d2a-7c2a6b1c2a3b",
+        "name": "executor:read",
+        "description": "Secrux permission: executor:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "c2a3b4c5-d6e7-4f80-9a1b-2c3d4e5f6071",
+        "name": "executor:manage",
+        "description": "Secrux permission: executor:manage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "c3d4e5f6-7a8b-4c9d-8e7f-6a5b4c3d2e1f",
+        "name": "finding:ingest",
+        "description": "Secrux permission: finding:ingest",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "d4e5f6a7-8b9c-4d0e-9f1a-2b3c4d5e6f70",
+        "name": "finding:read",
+        "description": "Secrux permission: finding:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "e5f6a7b8-9c0d-4e1f-a2b3-c4d5e6f70819",
+        "name": "finding:manage",
+        "description": "Secrux permission: finding:manage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "f6a7b8c9-0d1e-4f2a-b3c4-d5e6f708192a",
+        "name": "stage:manage",
+        "description": "Secrux permission: stage:manage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "a7b8c9d0-1e2f-4031-c4d5-e6f708192a3b",
+        "name": "stage:read",
+        "description": "Secrux permission: stage:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "b8c9d0e1-2f30-4142-d5e6-f708192a3b4c",
+        "name": "stage:execute",
+        "description": "Secrux permission: stage:execute",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "c9d0e1f2-3041-4253-e6f7-08192a3b4c5d",
+        "name": "baseline:manage",
+        "description": "Secrux permission: baseline:manage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "d0e1f2a3-4152-4364-f708-192a3b4c5d6e",
+        "name": "baseline:read",
+        "description": "Secrux permission: baseline:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "8a1e6bdb-6b87-4cfe-98dd-06bbbe80c4bd",
+        "name": "ai-client:read",
+        "description": "Secrux permission: ai-client:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "e8bd9505-5d0a-4a76-9c88-eaf1f98fba65",
+        "name": "ai-client:manage",
+        "description": "Secrux permission: ai-client:manage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "8c15fc34-46bc-4d45-ae70-d165d8fb0307",
+        "name": "ai-agent:read",
+        "description": "Secrux permission: ai-agent:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "a96cfb98-a5d4-437e-9d7c-50a8863a9c1a",
+        "name": "ai-agent:manage",
+        "description": "Secrux permission: ai-agent:manage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "db0efc8b-f589-42f7-a22d-2d6c3a67aa6a",
+        "name": "ai-mcp:read",
+        "description": "Secrux permission: ai-mcp:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "192a7300-d6e8-4ba2-a602-1ea6dc265c4d",
+        "name": "ai-mcp:manage",
+        "description": "Secrux permission: ai-mcp:manage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "73a8f74d-7d38-4ab4-9b77-e17d3c36ae6a",
+        "name": "ai-knowledge:read",
+        "description": "Secrux permission: ai-knowledge:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "a4f0611a-734e-4d87-980c-dcd5d4412f16",
+        "name": "ai-knowledge:manage",
+        "description": "Secrux permission: ai-knowledge:manage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "668b4044-a909-4406-8e7b-5b8139fdc70e",
+        "name": "user:read",
+        "description": "Secrux permission: user:read",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      },
+      {
+        "id": "d06c58f2-ad5b-4ff4-9bbf-00e5758adba6",
+        "name": "user:manage",
+        "description": "Secrux permission: user:manage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "secrux"
+      }
+    ],
+    "client": {
+      "secrux-console": [
+        {
+          "id": "f6d2b785-4f5c-4f18-b79e-2e17d9ccaaaa",
+          "name": "console_admin",
+          "description": "Console admin role for UI access",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "secrux-console"
+        }
+      ]
+    }
+  },
+  "clients": [
+    {
+      "id": "5a5d2f42-3cb1-42a9-b4f8-00000000cafe",
+      "clientId": "secrux-api",
+      "name": "Secrux API",
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "secrux-api-secret",
+      "serviceAccountsEnabled": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "authorizationServicesEnabled": false,
+      "fullScopeAllowed": true,
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "request.object.signature.alg": "RS256"
+      },
+      "defaultClientScopes": [
+        "secrux-tenant"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "secrux-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "secrux-api",
+            "id.token.claim": "true",
+            "access.token.claim": "true"
+          }
+        },
+        {
+          "name": "preferred_username",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "false",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "preferred_username",
+            "jsonType.label": "String",
+            "user.attribute": "username",
+            "user.property": "username"
+          }
+        },
+        {
+          "name": "email",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "false",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "email",
+            "jsonType.label": "String",
+            "user.attribute": "email",
+            "user.property": "email"
+          }
+        },
+        {
+          "name": "realm roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "realm_access.roles",
+            "jsonType.label": "String"
+          }
+        }
+      ]
+    },
+    {
+      "id": "3d3c4b6a-2f1c-4a1e-bc1f-00000000babe",
+      "clientId": "secrux-console",
+      "name": "Secrux Web Console",
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "secret": "",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "authorizationServicesEnabled": false,
+      "fullScopeAllowed": true,
+      "redirectUris": [
+        "http://localhost:5173/*",
+        "http://127.0.0.1:5173/*"
+      ],
+      "webOrigins": [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      },
+      "protocolMappers": [
+        {
+          "name": "secrux-api-aud",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "secrux-api",
+            "id.token.claim": "true",
+            "access.token.claim": "true"
+          }
+        },
+        {
+          "name": "preferred_username",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "false",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "preferred_username",
+            "jsonType.label": "String",
+            "user.attribute": "username",
+            "user.property": "username"
+          }
+        },
+        {
+          "name": "email",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "false",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "email",
+            "jsonType.label": "String",
+            "user.attribute": "email",
+            "user.property": "email"
+          }
+        },
+        {
+          "name": "realm roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "realm_access.roles",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "secrux-tenant"
+      ],
+      "optionalClientScopes": []
+    },
+    {
+      "id": "7f7f7f7f-aaaa-bbbb-cccc-00000000dede",
+      "clientId": "secrux-admin",
+      "name": "Secrux Admin Client",
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "changeme",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "fullScopeAllowed": true,
+      "authorizationServicesEnabled": false,
+      "attributes": {
+        "client.secret.creation.time": "0"
+      },
+      "defaultClientScopes": [
+        "secrux-tenant"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "realm roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "realm_access.roles",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "name": "client roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-client-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "resource_access.${client_id}.roles",
+            "jsonType.label": "String"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "b1b8243d-644b-4cbb-a05d-9405dda63999",
+      "username": "secrux",
+      "email": "secrux@secrux.local",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Secrux",
+      "lastName": "Admin",
+      "attributes": {
+        "tenant_id": [
+          "4223be89-773e-4321-9531-833fc1cb77af"
+        ]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "secrux",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "secrux_admin"
+      ],
+      "clientRoles": {
+        "secrux-console": [
+          "console_admin"
+        ]
+      }
+    },
+    {
+      "id": "10919814-f3a3-48ad-bc5f-02896149025c",
+      "username": "service-account-secrux-admin",
+      "enabled": true,
+      "serviceAccountClientId": "secrux-admin",
+      "clientRoles": {
+        "realm-management": [
+          "manage-users",
+          "view-users",
+          "query-users",
+          "realm-admin"
+        ]
+      }
+    }
+  ]
+}
