@@ -1,15 +1,15 @@
 [submodule "secrux-server"]
 	path = secrux-server
-	url = git@github.com:vayne-sec/secrux-server.git
+	url = https://github.com/vayne-sec/secrux-server.git
 [submodule "secrux-web"]
 	path = secrux-web
-	url = git@github.com:vayne-sec/secrux-web.git
+	url = https://github.com/vayne-sec/secrux-web.git
 [submodule "secrux-ai"]
 	path = secrux-ai
-	url = git@github.com:vayne-sec/secrux-ai.git
+	url = https://github.com/vayne-sec/secrux-ai.git
 [submodule "secrux-engine"]
 	path = secrux-engine
-	url = git@github.com:vayne-sec/secrux-engine.git
+	url = https://github.com/vayne-sec/secrux-engine.git
 [submodule "secrux-executor"]
 	path = secrux-executor
-	url = git@github.com:vayne-sec/secrux-executor.git
+	url = https://github.com/vayne-sec/secrux-executor.git
